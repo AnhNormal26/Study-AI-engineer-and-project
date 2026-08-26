@@ -86,3 +86,35 @@ y_test = np.array([0, 0, 1, 1, 2, 2])
 
 # phần 2 : CODE XỬ LÝ 
 
+class Nearest_centroid:
+    def __init__ (self):
+        self.average_list = []
+    def fit(self , X , Y) :
+        self.average_list = np.zeros((len(np.unique(Y)) , len(X[0]) ))
+        for x , y in zip(X, Y):
+            self.average_list[y]+=x
+        for i in np.unique(Y):
+            self.average_list[i]/=np.sum(Y==i)
+            print(self.average_list[i], "\n")
+    def predict(self , X):
+        min_val = float('inf')
+        min_id = 0
+        for y in range(len(self.average_list)):
+            tong = 0 
+            for id , val in enumerate(X):
+                tong += (self.average_list[y][id] - val)**2
+            min_val , min_id = min((min_val , min_id) , (tong , y))           
+        return min_id
+
+
+        
+
+
+kiem_tra = Nearest_centroid()
+print(2)
+kiem_tra.fit(X_train , y_train)
+for id , x in enumerate(X_test) :
+    if kiem_tra.predict(x) == y_test[id] :
+        print ("test ", id , " : CORRECT\n")
+    else :
+        print("test ", id , " : Wrong\n")
